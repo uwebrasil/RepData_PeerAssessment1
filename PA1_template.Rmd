@@ -2,7 +2,7 @@ Johns Hopkins <span style="font-size:10pt"> Bloomberg School <i>of</i> Public He
 ========================================================
 # <span style="color:#ff00ff">Reproducible Research: Peer Assessment 1</span>
 ## Loading and preprocessing the data
-```{r}
+```{r echo=TRUE}
 # read and group data by day
 act <- read.csv("activity.csv")
 groupByDay <- aggregate(steps~date, data = act, FUN = sum)
@@ -11,7 +11,7 @@ groupByDay <- aggregate(steps~date, data = act, FUN = sum)
 The following histogram shows the mean and median total number of steps taken per day.
 <br><b>Mean : 10766.2
 <br>Median: 10765</b>
-```{r plot,fig.height=5}
+```{r histogram,fig.height=5,echo=TRUE}
 # define some bin colors 
 colors = c("red", "yellow", "green", "violet", "orange", 
            "blue", "pink", "cyan","darkgoldenrod","forestgreen","maroon2")
@@ -33,7 +33,7 @@ mtext(paste("Median:",s_median),line=-1)
 ```
 ## What is the average daily activity pattern?
 The following times series shows a maximum peek (206.2) at 08:35.
-```{r time series,fig.height=5}
+```{r time series,fig.height=5,echo=TRUE}
 s_avg <- aggregate(steps~interval, data = act, FUN = mean)
 tx<-ts(s_avg,start=c(2012,10),frequency=24*60/5)
 plot(steps~interval,tx,type="l",
@@ -49,7 +49,7 @@ mtext(paste("Maximum:", formatC(s_max$steps, format="f", digits=1),"at Interval"
 ```
 ## Imputing missing values
 There are <b>2304</b> steps missing (NA values).
-```{r}
+```{r echo=TRUE}
 # missing values
 n_na <-act[is.na(act$steps),]
 nrow(n_na)
@@ -66,7 +66,7 @@ The idea for the following snippet to replace the missing values was found
 html <- "http://stackoverflow.com/questions/9322773/how-to-replace-na-with-mean-by-subset-in-r-impute-with-plyr"
 cat(paste("[here](",html,")",sep=""))
 ``` 
-```{r}
+```{r histogram_impute,fig.height=6,echo=TRUE}
 library(plyr)
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 act2 <- ddply(act, ~ interval, transform, steps = impute.mean(steps)
@@ -102,7 +102,7 @@ The following plot shows the differences in activity patterns between weekdays a
 <li>On weekends there is more activity all day long.</li>
 <li>On weekdays there is a higher peek of activity earlier in the morning.</li> 
 </ul>
-```{r}
+```{r weekend_day,echo=TRUE}
 # add logical column
 act2$daytype <- substr(weekdays(as.Date(act2$date)),1,1) == "S"
 # split data in weekday and weekend

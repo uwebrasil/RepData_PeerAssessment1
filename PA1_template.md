@@ -34,7 +34,7 @@ mtext(paste("Mean  :",s_mean),line=0)
 mtext(paste("Median:",s_median),line=-1)
 ```
 
-![plot of chunk plot](figure/plot.png) 
+![plot of chunk histogram](figure/histogram.png) 
 ## What is the average daily activity pattern?
 The following times series shows a maximum peek (206.2) at 08:35.
 
@@ -107,7 +107,7 @@ mtext(paste("Mean  :",s_mean),line=-1)
 mtext(paste("Median:",s_median),line=-2)
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
+![plot of chunk histogram_impute](figure/histogram_impute.png) 
 ## Are there differences in activity patterns between weekdays and weekends?
 The following plot shows the differences in activity patterns between weekdays and weekends.
 <ul>
@@ -152,4 +152,4 @@ axis(1, at=seq(0,2400,by=300) )
 mtext(paste("Maximum:", formatC(s_max$steps, format="f", digits=1),"at Interval",s_max$interval),side=3)
 ```
 
-![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
+![plot of chunk weekend_day](figure/weekend_day.png) 
