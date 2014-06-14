@@ -2,7 +2,8 @@ Johns Hopkins <span style="font-size:10pt"> Bloomberg School <i>of</i> Public He
 ========================================================
 # <span style="color:#ff00ff">Reproducible Research: Peer Assessment 1</span>
 ## Loading and preprocessing the data
-```{r}
+
+```r
 # read and group data by day
 act <- read.csv("activity.csv")
 groupByDay <- aggregate(steps~date, data = act, FUN = sum)
@@ -11,7 +12,8 @@ groupByDay <- aggregate(steps~date, data = act, FUN = sum)
 The following histogram shows the mean and median total number of steps taken per day.
 <br><b>Mean : 10766.2
 <br>Median: 10765</b>
-```{r plot,fig.height=5}
+
+```r
 # define some bin colors 
 colors = c("red", "yellow", "green", "violet", "orange", 
            "blue", "pink", "cyan","darkgoldenrod","forestgreen","maroon2")
@@ -31,9 +33,12 @@ s_median <- median(groupByDay$steps)
 mtext(paste("Mean  :",s_mean),line=0)
 mtext(paste("Median:",s_median),line=-1)
 ```
+
+![plot of chunk plot](figure/plot.png) 
 ## What is the average daily activity pattern?
 The following times series shows a maximum peek (206.2) at 08:35.
-```{r time series,fig.height=5}
+
+```r
 s_avg <- aggregate(steps~interval, data = act, FUN = mean)
 tx<-ts(s_avg,start=c(2012,10),frequency=24*60/5)
 plot(steps~interval,tx,type="l",
@@ -47,12 +52,19 @@ title(main="Average Daily Activity Pattern", col.main="black", font.main=4,line=
 axis(1, at=seq(0,2400,by=300) )
 mtext(paste("Maximum:", formatC(s_max$steps, format="f", digits=1),"at Interval",s_max$interval),side=3)
 ```
+
+![plot of chunk time series](figure/time series.png) 
 ## Imputing missing values
 There are <b>2304</b> steps missing (NA values).
-```{r}
+
+```r
 # missing values
 n_na <-act[is.na(act$steps),]
 nrow(n_na)
+```
+
+```
+## [1] 2304
 ```
 Missing are substitutes by the mean for that 5-minute interval.
 The histogram made of the new dataset shows the following characteristics:
@@ -62,11 +74,9 @@ The histogram made of the new dataset shows the following characteristics:
 </ul>
 
 The idea for the following snippet to replace the missing values was found 
-```{r, results='asis', echo=FALSE}
-html <- "http://stackoverflow.com/questions/9322773/how-to-replace-na-with-mean-by-subset-in-r-impute-with-plyr"
-cat(paste("[here](",html,")",sep=""))
-``` 
-```{r}
+[here](http://stackoverflow.com/questions/9322773/how-to-replace-na-with-mean-by-subset-in-r-impute-with-plyr)
+
+```r
 library(plyr)
 impute.mean <- function(x) replace(x, is.na(x), mean(x, na.rm = TRUE))
 act2 <- ddply(act, ~ interval, transform, steps = impute.mean(steps)
@@ -96,13 +106,16 @@ mtext(paste("(replaced NA-steps with the mean for that 5min interval)"),line=0)
 mtext(paste("Mean  :",s_mean),line=-1)
 mtext(paste("Median:",s_median),line=-2)
 ```
+
+![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4.png) 
 ## Are there differences in activity patterns between weekdays and weekends?
 The following plot shows the differences in activity patterns between weekdays and weekends.
 <ul>
 <li>On weekends there is more activity all day long.</li>
 <li>On weekdays there is a higher peek of activity earlier in the morning.</li> 
 </ul>
-```{r}
+
+```r
 # add logical column
 act2$daytype <- substr(weekdays(as.Date(act2$date)),1,1) == "S"
 # split data in weekday and weekend
@@ -138,3 +151,5 @@ title(main="Average Daily Activity Pattern (Weekday)", col.main="black", font.ma
 axis(1, at=seq(0,2400,by=300) )
 mtext(paste("Maximum:", formatC(s_max$steps, format="f", digits=1),"at Interval",s_max$interval),side=3)
 ```
+
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5.png) 
